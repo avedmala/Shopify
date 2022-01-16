@@ -84,7 +84,41 @@ def test_get_inventory():
 
 @pytest.mark.order(4)
 def test_get_filtered_inventory():
-    assert True
+    client.put(
+        "/add-item",
+        json={
+            "product_id": "c",
+            "name": "b",
+            "description": "c",
+            "unit_cost": 0.0,
+            "unit_weight": 1.0,
+            "stock": 0,
+            "last_change": "2000-01-01T12:00:00",
+        },
+    )
+
+    response = client.get(
+        "/get-filtered-inventory",
+        params={
+            "in_stock": True,
+            "min_cost": 0.0,
+            "max_cost": 10.0,
+            "min_weight": 0.0,
+            "max_weight": 10.0,
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "product_id": "a",
+            "name": "b",
+            "description": "c",
+            "unit_cost": 0.0,
+            "unit_weight": 1.0,
+            "stock": 2,
+            "last_change": "2000-01-01T12:00:00",
+        }
+    ]
 
 
 @pytest.mark.order(5)

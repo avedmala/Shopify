@@ -25,19 +25,18 @@ Run the following in the project directory to start the API with hot-reloading.
 uvicorn api.main:app --reload
 ```
 
-The focus was on the backend so the frontend is pretty barebones. When trying it out, visit http://127.0.0.1:8000/get-inventory to see how the database is changing. Alternatively, the endpoints can also be triggered using the documentation below.
+The focus was on the backend so I skipped the frontend as all the logic can be triggered via the Swagger Docs. When trying it out you can also visit http://127.0.0.1:8000/get-inventory to see how the database is changing.
 
 ## Documentation
 
-To view the auto-generated documentation for the PBX Backend, please visit the
-documentation page at http://127.0.0.1:8000/docs. URL may vary but the path is the same. This page is also a great place to try the endpoints just like you would in Postman or other RESTful API testing tools.
+To view the auto-generated documentation for the, please visit the documentation page at http://127.0.0.1:8000/docs. URL may vary but the path is the same. This page is also a great place to try the endpoints just like you would in Postman or other RESTful API testing tools.
 
 ## Endpoint Explanation
 
 **Get Inventory** - GET Request which will return all the items in the inventory.
 
 **Get Filtered Inventory** - GET Request which will return items in the inventory that
-match the given filters (stock, cost, weight).
+match the given filters (in_stock, cost, weight). Note that the stock filter will show only items in stock if set to True and all items if set to False.
 
 **Get Item** - GET Request which will return information about a specific item in the inventory if it exists.
 
@@ -50,10 +49,16 @@ the same Product ID exists.
 
 ## Additional Thoughts on Design
 
-I split up the frontend and backend because it'll make it easy to add more features later down the line. For example, when adding a new feature, the frontend dev only needs to interact with API endpoints with the actual logic abstracted away. It also makes testing easier.
+I built an API because it'll make it easy to add more features later down the line. For example, when adding a new feature, the frontend dev only needs to interact with API endpoints with the actual logic abstracted away. It also makes testing easier.
+
+To speak on testing and formatting, the tests are like integration tests, where I create a test database and run the endpoints against it. All the code has been formatted with black and isort. Also enforcing flake8 standards and a pylint score of 9.38. All of these are enforced with pre-commit hooks.
+
+The tests have 100% line coverage. To run the tests, run the following command in the project directory.
+
+`pytest --cov-report term-missing --cov=api tests`
 
 One thing I was considering was to combine the add and update functions into one function that would update an item if it exists, or add a new item if it doesn't. I decided against this because I just wanted to be explicit with the functionality for the sake of the challenge.
 
 I also made sure to use prepared statements to prevent SQL injection attacks.
 
-I've been enjoying FastAPI as opposed to Flask, which I've used in the past. The auto-generated documentation is very useful and I'm glad I used it. It also makes testing and dealing with data types much easier.
+In general, I've been enjoying FastAPI as opposed to Flask, which I've used in the past. The auto-generated documentation is very useful and I'm glad I used it. It also makes testing and dealing with data types much easier.

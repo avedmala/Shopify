@@ -11,9 +11,7 @@ from api.schema import Item
 app = FastAPI()
 
 # Switch to the test database for tests so the normal inventory is untouched
-DB_PATH = (
-    "tests/test_inventory.db" if "pytest" in sys.modules.keys() else "inventory.db"
-)
+DB_PATH = "tests/test_inventory.db" if "pytest" in sys.modules else "inventory.db"
 
 
 @app.get("/get-inventory", response_model=List[Item])
